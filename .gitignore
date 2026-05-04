@@ -1,0 +1,7 @@
+backend/venv/
+frontend-react/node_modules/
+*.pyc
+__pycache__/
+.env
+.DS_Store
+*.log
