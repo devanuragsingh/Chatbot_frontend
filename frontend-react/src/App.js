@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 
+// 🔥 Your deployed backend URL
+const API_URL = "https://ai-chatbot-backend-34i9.onrender.com";
+
 function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -17,7 +20,7 @@ function App() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/chat", {
+      const res = await fetch(`${API_URL}/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -28,6 +31,11 @@ function App() {
         }),
       });
 
+      // 🔒 Handle server errors
+      if (!res.ok) {
+        throw new Error("Server error");
+      }
+
       const data = await res.json();
 
       const botMsg = { text: data.bot, sender: "bot" };
@@ -35,19 +43,19 @@ function App() {
     } catch (err) {
       setMessages((prev) => [
         ...prev,
-        { text: "Error connecting to server ❌", sender: "bot" },
+        { text: "Server unreachable or error ❌", sender: "bot" },
       ]);
     }
 
     setLoading(false);
   };
 
-  // Auto scroll
+  // 🔄 Auto scroll
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
-  // Enter key support
+  // ⌨️ Enter key support
   const handleKeyPress = (e) => {
     if (e.key === "Enter") sendMessage();
   };
@@ -95,6 +103,7 @@ function App() {
   );
 }
 
+// 🎨 Styles
 const styles = {
   container: {
     textAlign: "center",
